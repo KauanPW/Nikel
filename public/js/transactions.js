@@ -1,4 +1,4 @@
-const myModal = new bootstrap.Modal("#transaction-modal")
+const myModal = new bootstrap.Modal("#transaction-modal");
 let logged = sessionStorage.getItem("logged");
 const session = localStorage.getItem("session");
 
@@ -8,17 +8,20 @@ let data = {
 
 document.getElementById("button-logout").addEventListener("click", logout);
 
-//ADICIONAR LANÇAMENTO
+// ADICIONAR LANÇAMENTO
 document.getElementById("transaction-form").addEventListener("submit", function(e) {
     e.preventDefault();
 
-    const value = parseFloat(document.getElementById("value-input").value);
+    const value = parseFloat(document.getElementById("value-input").value); //parseFloat - transforma o número que possa ter virgula
     const description = document.getElementById("description-input").value;
     const date = document.getElementById("date-input").value;
-    const type = document.querySelector('input[name ="type-input"]:checked').value;
+    const type = document.querySelector('input[name="type-input"]:checked').value; // pegar o que está checkado
 
-    data.transactions.unshift({
-        value: value, type: type, description: description, date: date
+    data.transactions.unshift ({ // unshift - add o valor na parte de cima da lista
+        value: value,
+        type: type, 
+        description: description, 
+        date: date
     });
 
     saveData(data);
@@ -28,43 +31,42 @@ document.getElementById("transaction-form").addEventListener("submit", function(
     getTransactions();
 
     alert("Lançamento adicionado com sucesso.");
-
 });
 
 checkLogged();
 
 function checkLogged() {
-    if (session) {
+    if(session) {
         sessionStorage.setItem("logged", session);
         logged = session;
     }
 
-    if (!logged) {
+    if(!logged) {        
         window.location.href = "index.html";
         return;
     }
 
     const dataUser = localStorage.getItem(logged);
-    if (dataUser) {
+    if(dataUser){
         data = JSON.parse(dataUser);
     }
 
     getTransactions();
+};
 
-}
-
+// FUNÇÃO LOGOUT
 function logout() {
     sessionStorage.removeItem("logged");
     localStorage.removeItem("session");
 
     window.location.href = "index.html";
-}
+};
 
 function getTransactions() {
     const transactions = data.transactions;
-    const transactionsHtml = ``;
+    let transactionsHtml = ``;
 
-    if(transactions.lenght) {
+    if(transactions.length) {
         transactions.forEach((item) => {
             let type = "Entrada";
 
@@ -78,7 +80,7 @@ function getTransactions() {
                     <td>${item.value.toFixed(2)}</td>
                     <td>${type}</td>
                     <td>${item.description}</td>
-                </tr>
+                </tr> 
             `
         })
     }
@@ -88,4 +90,4 @@ function getTransactions() {
 
 function saveData(data) {
     localStorage.setItem(data.login, JSON.stringify(data));
-}
+};
